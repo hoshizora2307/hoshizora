@@ -13,15 +13,11 @@
     <div class="container">
         <header>
             <h1>🌟 今夜の星空指数 🌌</h1>
+            <p>長野県下高井郡山ノ内平穏</p>
             <p id="date"></p>
         </header>
 
         <main>
-            <div id="location-input">
-                <input type="text" id="city" placeholder="場所を入力してね！">
-                <button id="search-btn">🔍</button>
-            </div>
-            
             <div id="star-index-display">
                 <div id="index-value"></div>
                 <div id="index-message"></div>
@@ -34,14 +30,16 @@
                 <p>雲の量: <span id="clouds">--</span></p>
                 <p>月齢: <span id="moon-phase">--</span></p>
             </div>
+            
+            <button id="refresh-btn">最新の情報に更新</button>
         </main>
-    </div>
 
-    <footer>
-        <p>製作者：hoshizora2307</p>
-        <p>天気監修：高瀬 敏行</p>
-        <p>著作権者：株式会社S&T観光開発</p>
-    </footer>
+        <footer>
+            <p>製作者：hoshizora2307</p>
+            <p>天気監修：高瀬 敏行</p>
+            <p>著作権者：株式会社S&T観光開発</p>
+        </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>

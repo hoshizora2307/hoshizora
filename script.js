@@ -19,9 +19,9 @@ const starCharacters = {
 
 const messages = {
     'excellent': '✨🚀 最高の星空日和だよ！流れ星が見えるかも？',
-    'good': '🌠 星どころか、星座まではっきりと見えるかも！？',
-    'average': '☁️ 今日はちょっと雲が多いみたい…。でもあきらめない！',
-    'bad': '☔ お星様は就寝中みたいだ。。おそらく見えないよ。。。',
+    'good': '🌠 条件は悪くない！',
+    'average': '☁️ 今日はちょっと雲が多いみたい…。でも、あきらめない！',
+    'bad': '☔ お星様はおやすみ中。今日はダメかも。。。',
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -34,20 +34,29 @@ refreshBtn.addEventListener('click', () => {
 });
 
 async function fetchWeatherData() {
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&lang=ja&units=metric`;
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&lang=ja&units=metric`;
     
     try {
         const response = await fetch(weatherUrl);
         if (!response.ok) {
             throw new Error('天気情報を取得できませんでした。APIキーを確認してください。');
         }
-        const weatherData = await response.json();
+        const forecastData = await response.json();
         
+        // 当日の20時時点の予報を見つける
         const today = new Date();
-        const moonPhaseValue = calculateMoonPhase(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        const forecast20h = forecastData.list.find(item => {
+            const forecastDate = new Date(item.dt * 1000);
+            return forecastDate.getDate() === today.getDate() && forecastDate.getHours() >= 20;
+        });
 
-        const starIndex = calculateStarIndex(weatherData, moonPhaseValue);
-        displayStarIndex(starIndex, weatherData, moonPhaseValue);
+        if (!forecast20h) {
+            throw new Error('本日20時の予報が見つかりませんでした。');
+        }
+
+        const moonPhaseValue = calculateMoonPhase(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        const starIndex = calculateStarIndex(forecast20h, moonPhaseValue);
+        displayStarIndex(starIndex, forecast20h, moonPhaseValue);
 
     } catch (error) {
         alert('ごめんね！' + error.message);
@@ -117,5 +126,5 @@ function clearDisplay() {
     weatherDisplay.textContent = '--';
     cloudsDisplay.textContent = '--';
     moonPhaseDisplay.textContent = '--';
-    cuteCharacter.style.backgroundImage = 'none'; // 初期表示は画像なし
+    cuteCharacter.style.backgroundImage = 'none';
 }

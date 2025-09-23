@@ -1,4 +1,4 @@
-const API_KEY = 'c87064f29ceb28115ccf465338fd12ba'; // ★ここにあなたのAPIキーを貼り付けてください
+const API_KEY = 'YOUR_API_KEY_HERE'; // ★ここにあなたのAPIキーを貼り付けてください
 const city = 'Yamanouchi'; // 長野県下高井郡山ノ内町に固定
 const dateDisplay = document.getElementById('date');
 const indexValue = document.getElementById('index-value');
@@ -9,11 +9,12 @@ const moonPhaseDisplay = document.getElementById('moon-phase');
 const cuteCharacter = document.getElementById('cute-character');
 const refreshBtn = document.getElementById('refresh-btn');
 
+// ここを修正：全ての星空指数でtakase02.pngを表示するように変更
 const starCharacters = {
-    'excellent': 'url("https://i.imgur.com/G4Yt04o.png")',
-    'good': 'url("https://i.imgur.com/wVjJ4Gg.png")',
-    'average': 'url("https://i.imgur.com/e5Y3g0o.png")',
-    'bad': 'url("https://i.imgur.com/7bQj70U.png")',
+    'excellent': 'url("takase02.png")',
+    'good': 'url("takase02.png")',
+    'average': 'url("takase02.png")',
+    'bad': 'url("takase02.png")',
 };
 
 const messages = {
@@ -116,5 +117,5 @@ function clearDisplay() {
     weatherDisplay.textContent = '--';
     cloudsDisplay.textContent = '--';
     moonPhaseDisplay.textContent = '--';
-    cuteCharacter.style.backgroundImage = 'none';
+    cuteCharacter.style.backgroundImage = 'none'; // 初期表示は画像なし
 }

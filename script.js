@@ -1,4 +1,4 @@
-const API_KEY = 'c87064f29ceb28115ccf465338fd12ba'; // ★ここにあなたのAPIキーを貼り付けてください
+const API_KEY = 'YOUR_API_KEY_HERE'; // ★ここにあなたのAPIキーを貼り付けてください
 const cityInput = document.getElementById('city');
 const searchBtn = document.getElementById('search-btn');
 const dateDisplay = document.getElementById('date');
@@ -8,12 +8,20 @@ const weatherDisplay = document.getElementById('weather');
 const cloudsDisplay = document.getElementById('clouds');
 const moonPhaseDisplay = document.getElementById('moon-phase');
 const cuteCharacter = document.getElementById('cute-character');
+const detailsSection = document.getElementById('details');
 
 const starCharacters = {
     'excellent': 'url("https://i.imgur.com/G4Yt04o.png")', // 流れ星
     'good': 'url("https://i.imgur.com/wVjJ4Gg.png")',    // 笑顔の星
     'average': 'url("https://i.imgur.com/e5Y3g0o.png")',  // ちょっと困った顔の雲
     'bad': 'url("https://i.imgur.com/7bQj70U.png")',      // 泣いている雲
+};
+
+const messages = {
+    'excellent': '✨🚀 最高の星空日和だよ！流れ星が見えるかも？',
+    'good': '🌠 星が見えるかも！雲のすきまから探してみてね。',
+    'average': '☁️ 今日はちょっと雲が多いみたい…。明日また見てみよう！',
+    'bad': '☔ お星様はおやすみ中だよ。また今度見に来てね。',
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,24 +36,34 @@ searchBtn.addEventListener('click', () => {
 });
 
 async function fetchWeatherData(city) {
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&lang=ja&units=metric`;
+    // OpenWeatherMapのForecast APIを呼び出す
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&lang=ja&units=metric`;
     
     try {
-        const response = await fetch(weatherUrl);
+        const response = await fetch(forecastUrl);
         if (!response.ok) {
             throw new Error('都市が見つかりません。');
         }
-        const weatherData = await response.json();
+        const forecastData = await response.json();
         
-        // 月齢データを計算（簡略化されたロジック）
+        // 当日の夜の予報を特定する（例：21時の予報）
         const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1;
-        const day = today.getDate();
-        const moonPhaseValue = calculateMoonPhase(year, month, day);
+        const todayForecast = forecastData.list.find(item => {
+            const forecastDate = new Date(item.dt * 1000);
+            return forecastDate.getFullYear() === today.getFullYear() && 
+                   forecastDate.getMonth() === today.getMonth() && 
+                   forecastDate.getDate() === today.getDate() &&
+                   forecastDate.getHours() >= 18 && forecastDate.getHours() <= 24; // 夜間の予報を探す
+        });
 
-        const starIndex = calculateStarIndex(weatherData, moonPhaseValue);
-        displayStarIndex(starIndex, weatherData, moonPhaseValue);
+        if (todayForecast) {
+            const moonPhaseValue = calculateMoonPhase(today.getFullYear(), today.getMonth() + 1, today.getDate());
+            const starIndex = calculateStarIndex(todayForecast, moonPhaseValue);
+            displayCurrentIndex(starIndex, todayForecast, moonPhaseValue);
+        } else {
+            // 当日の夜のデータがない場合はカレンダーを表示
+            buildCalendar(forecastData);
+        }
 
     } catch (error) {
         alert('ごめんね！' + error.message);
@@ -54,34 +72,24 @@ async function fetchWeatherData(city) {
 }
 
 function calculateMoonPhase(year, month, day) {
-    // 朔望月（新月から新月までの周期）の平均日数は29.530589日
     const moonCycle = 29.530589;
-    
-    // 2000年1月6日を基準日（新月）とする
     const baseDate = new Date(2000, 0, 6);
     const today = new Date(year, month - 1, day);
-    
     const diffDays = (today - baseDate) / (1000 * 60 * 60 * 24);
     const moonPhase = (diffDays % moonCycle);
-    
     return Math.floor(moonPhase);
 }
 
-function calculateStarIndex(weatherData, moonPhaseValue) {
+function calculateStarIndex(data, moonPhaseValue) {
     let index = 0;
-    
-    // 天気の評価
-    const weatherMain = weatherData.weather[0].main;
+    const weatherMain = data.weather[0].main;
     if (weatherMain === 'Clear') {
         index += 50;
     } else if (weatherMain === 'Clouds') {
         index += 20;
-    } else {
-        index = 0; // 雨や雪の場合は星空指数を0にする
     }
     
-    // 雲の量の評価
-    const clouds = weatherData.clouds.all;
+    const clouds = data.clouds.all;
     if (clouds <= 20) {
         index += 30;
     } else if (clouds <= 50) {
@@ -90,45 +98,103 @@ function calculateStarIndex(weatherData, moonPhaseValue) {
         index -= 20;
     }
 
-    // 月齢の評価
     if (moonPhaseValue >= 0 && moonPhaseValue <= 3 || moonPhaseValue >= 26) {
-        index += 20; // 新月付近
+        index += 20;
     } else if (moonPhaseValue >= 13 && moonPhaseValue <= 16) {
-        index -= 30; // 満月付近
+        index -= 30;
     }
 
-    // 0から100の範囲に調整
     index = Math.max(0, Math.min(100, index));
-    
     return index;
 }
 
-function displayStarIndex(starIndex, weatherData, moonPhaseValue) {
+function displayCurrentIndex(starIndex, data, moonPhaseValue) {
     indexValue.textContent = starIndex;
-    
-    let message = '';
-    let characterKey = '';
-    if (starIndex >= 80) {
-        message = '✨🚀 最高の星空日和だよ！流れ星が見えるかも？';
-        characterKey = 'excellent';
-    } else if (starIndex >= 50) {
-        message = '🌠 星が見えるかも！雲のすきまから探してみてね。';
-        characterKey = 'good';
-    } else if (starIndex >= 20) {
-        message = '☁️ 今日はちょっと雲が多いみたい…。明日また見てみよう！';
-        characterKey = 'average';
-    } else {
-        message = '☔ お星様はおやすみ中だよ。また今度見に来てね。';
-        characterKey = 'bad';
-    }
-    
-    indexMessage.textContent = message;
-    weatherDisplay.textContent = weatherData.weather[0].description;
-    cloudsDisplay.textContent = `${weatherData.clouds.all}%`;
+    const characterKey = getCharacterKey(starIndex);
+    indexMessage.textContent = messages[characterKey];
+    weatherDisplay.textContent = data.weather[0].description;
+    cloudsDisplay.textContent = `${data.clouds.all}%`;
     moonPhaseDisplay.textContent = `${moonPhaseValue}日`;
-
     cuteCharacter.style.backgroundImage = starCharacters[characterKey];
+    detailsSection.innerHTML = `
+        <h2>詳細</h2>
+        <p>天気: <span id="weather">${data.weather[0].description}</span></p>
+        <p>雲の量: <span id="clouds">${data.clouds.all}%</span></p>
+        <p>月齢: <span id="moon-phase">${moonPhaseValue}日</span></p>
+    `;
 }
+
+function getCharacterKey(starIndex) {
+    if (starIndex >= 80) return 'excellent';
+    if (starIndex >= 50) return 'good';
+    if (starIndex >= 20) return 'average';
+    return 'bad';
+}
+
+function buildCalendar(forecastData) {
+    const days = {};
+    forecastData.list.forEach(item => {
+        const date = new Date(item.dt * 1000);
+        const dayKey = date.toISOString().split('T')[0];
+        if (!days[dayKey]) {
+            days[dayKey] = { date, nightData: null };
+        }
+        if (date.getHours() >= 18 && date.getHours() <= 24) {
+            days[dayKey].nightData = item;
+        }
+    });
+
+    let calendarHtml = '<h2 class="calendar-title">週間星空カレンダー</h2><div class="calendar-grid">';
+    for (const dayKey in days) {
+        const dayInfo = days[dayKey];
+        const date = dayInfo.date;
+        const nightData = dayInfo.nightData;
+        const moonPhaseValue = calculateMoonPhase(date.getFullYear(), date.getMonth() + 1, date.getDate());
+        
+        let starIndex = '--';
+        let emoji = '❓';
+        let message = '予報なし';
+
+        if (nightData) {
+            starIndex = calculateStarIndex(nightData, moonPhaseValue);
+            const characterKey = getCharacterKey(starIndex);
+            message = messages[characterKey];
+            
+            if (characterKey === 'excellent') emoji = '✨';
+            else if (characterKey === 'good') emoji = '⭐';
+            else if (characterKey === 'average') emoji = '☁️';
+            else emoji = '💧';
+        }
+
+        calendarHtml += `
+            <div class="calendar-item">
+                <div class="calendar-date">${date.getMonth() + 1}/${date.getDate()}</div>
+                <div class="calendar-emoji">${emoji}</div>
+                <div class="calendar-index">${starIndex}</div>
+            </div>
+        `;
+    }
+    calendarHtml += '</div>';
+
+    indexValue.textContent = '';
+    indexMessage.textContent = '';
+    cuteCharacter.style.backgroundImage = 'none';
+    detailsSection.innerHTML = calendarHtml;
+    
+    // カレンダー用のスタイルを追加
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .calendar-title { font-size: 1.2em; color: #4a4a9c; margin-bottom: 10px; border-bottom: none; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        .calendar-item { background-color: rgba(255, 255, 255, 0.5); padding: 15px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .calendar-date { font-weight: bold; font-size: 1.1em; color: #666; }
+        .calendar-emoji { font-size: 2em; margin: 5px 0; }
+        .calendar-index { font-weight: bold; color: #ff69b4; font-size: 1.5em; }
+    `;
+    document.head.appendChild(style);
+}
+
+clearDisplay();
 
 function clearDisplay() {
     indexValue.textContent = '--';
@@ -137,6 +203,10 @@ function clearDisplay() {
     cloudsDisplay.textContent = '--';
     moonPhaseDisplay.textContent = '--';
     cuteCharacter.style.backgroundImage = 'none';
+    detailsSection.innerHTML = `
+        <h2>詳細</h2>
+        <p>天気: <span id="weather">--</span></p>
+        <p>雲の量: <span id="clouds">--</span></p>
+        <p>月齢: <span id="moon-phase">--</span></p>
+    `;
 }
-
-clearDisplay();

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>きらきら星空アプリ</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌟 今日の星空指数 🌌</h1>
+            <div id="date"></div>
+        </header>
+
+        <main>
+            <div id="location-input">
+                <input type="text" id="city" placeholder="場所を入力してね！">
+                <button id="search-btn">🔍</button>
+            </div>
+            
+            <div id="star-index-display">
+                <div id="index-value"></div>
+                <div id="index-message"></div>
+                <div id="cute-character"></div>
+            </div>
+
+            <div id="details">
+                <h2>詳細</h2>
+                <p>天気: <span id="weather"></span></p>
+                <p>雲の量: <span id="clouds"></span></p>
+                <p>月齢: <span id="moon-phase"></span></p>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

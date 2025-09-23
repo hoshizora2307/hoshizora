@@ -1,4 +1,4 @@
-const API_KEY = 'c87064f29ceb28115ccf465338fd12ba'; // ★ここにあなたのAPIキーを貼り付けてください
+const API_KEY = 'YOUR_API_KEY_HERE'; // ★ここにあなたのAPIキーを貼り付けてください
 const cityInput = document.getElementById('city');
 const searchBtn = document.getElementById('search-btn');
 const dateDisplay = document.getElementById('date');

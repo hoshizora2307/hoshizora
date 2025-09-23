@@ -5,16 +5,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh; /* 画面全体を覆うように変更 */
     margin: 0;
     text-align: center;
-    overflow: hidden;
+    overflow-y: auto; /* 縦スクロールを有効にする */
     position: relative;
+    padding: 20px 0; /* 上下の余白を追加 */
+    box-sizing: border-box; /* パディングを含めてサイズ計算 */
 }
 
 body::before {
     content: '';
-    position: absolute;
+    position: fixed; /* 背景を固定 */
     top: 0;
     left: 0;
     width: 100%;
@@ -22,6 +24,7 @@ body::before {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="80" r="1.5" fill="%23fff" opacity="0.8" /><circle cx="50" cy="20" r="1" fill="%23fff" opacity="0.6" /><circle cx="80" cy="50" r="2" fill="%23fff" opacity="0.9" /><path d="M70,10 L71,11 M71,10 L70,11" stroke="%23fff" stroke-width="0.5" /><path d="M10,40 L11,41 M11,40 L10,41" stroke="%23fff" stroke-width="0.5" /></svg>');
     background-size: 5% 5%, 8% 8%;
     animation: twinkle 5s infinite;
+    z-index: -1; /* コンテンツの下に配置 */
 }
 
 @keyframes twinkle {
@@ -38,6 +41,7 @@ body::before {
     border: 2px solid rgba(255, 255, 255, 0.8);
     max-width: 400px;
     width: 90%;
+    margin: auto; /* 中央揃え */
 }
 
 header h1 {

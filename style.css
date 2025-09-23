@@ -52,41 +52,6 @@ header p {
     font-size: 0.9em;
 }
 
-#location-input {
-    margin: 20px 0;
-}
-
-#city {
-    padding: 10px 15px;
-    border: 2px solid #a4c4f9;
-    border-radius: 25px;
-    font-size: 1em;
-    width: 70%;
-    transition: all 0.3s ease;
-}
-
-#city:focus {
-    outline: none;
-    border-color: #769af5;
-}
-
-#search-btn {
-    padding: 10px 15px;
-    border: none;
-    background-color: #ff91a4;
-    color: white;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-left: 10px;
-    transition: transform 0.2s ease;
-}
-
-#search-btn:hover {
-    transform: scale(1.05);
-    background-color: #ff7f95;
-}
-
 #star-index-display {
     padding: 20px 0;
     border-bottom: 1px dashed #ccc;
@@ -131,6 +96,23 @@ header p {
 #details p {
     margin: 5px 0;
     color: #555;
+}
+
+#refresh-btn {
+    padding: 10px 20px;
+    margin-top: 20px;
+    border: none;
+    background-color: #769af5;
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: transform 0.2s ease;
+}
+
+#refresh-btn:hover {
+    transform: scale(1.05);
+    background-color: #6187d6;
 }
 
 footer {

@@ -1,4 +1,4 @@
-const API_KEY = 'YOUR_API_KEY_HERE'; // ★ここにあなたのAPIキーを貼り付けてください
+const API_KEY = 'c87064f29ceb28115ccf465338fd12ba'; // ★ここにあなたのAPIキーを貼り付けてください
 const city = 'Yamanouchi'; // 長野県下高井郡山ノ内町に固定
 const dateDisplay = document.getElementById('date');
 const indexValue = document.getElementById('index-value');

@@ -1,6 +1,7 @@
 const API_KEY = 'c87064f29ceb28115ccf465338fd12ba'; // ★ここにあなたのAPIキーを貼り付けてください
 const city = 'Yamanouchi'; // 長野県下高井郡山ノ内町に固定
 const dateDisplay = document.getElementById('date');
+const timeDisplay = document.getElementById('time-display');
 const indexValue = document.getElementById('index-value');
 const indexMessage = document.getElementById('index-message');
 const weatherDisplay = document.getElementById('weather');
@@ -9,7 +10,6 @@ const moonPhaseDisplay = document.getElementById('moon-phase');
 const cuteCharacter = document.getElementById('cute-character');
 const refreshBtn = document.getElementById('refresh-btn');
 
-// ここを修正：全ての星空指数でtakase02.pngを表示するように変更
 const starCharacters = {
     'excellent': 'url("takase02.png")',
     'good': 'url("takase02.png")',
@@ -19,9 +19,9 @@ const starCharacters = {
 
 const messages = {
     'excellent': '✨🚀 最高の星空日和だよ！流れ星が見えるかも？',
-    'good': '🌠 条件は悪くない！',
-    'average': '☁️ 今日はちょっと雲が多いみたい…。でも、あきらめない！',
-    'bad': '☔ お星様はおやすみ中。今日はダメかも。。。',
+    'good': '🌠 星が見える条件は整った！',
+    'average': '☁️ 今日はちょっと雲が多いみたい…。でも、あきらめないっ！',
+    'bad': '☔ 今夜の星空は、、、厳しいですね。。。',
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -43,7 +43,6 @@ async function fetchWeatherData() {
         }
         const forecastData = await response.json();
         
-        // 当日の20時時点の予報を見つける
         const today = new Date();
         const forecast20h = forecastData.list.find(item => {
             const forecastDate = new Date(item.dt * 1000);
@@ -53,6 +52,10 @@ async function fetchWeatherData() {
         if (!forecast20h) {
             throw new Error('本日20時の予報が見つかりませんでした。');
         }
+
+        // 時刻表示の更新
+        const forecastTime = new Date(forecast20h.dt * 1000);
+        timeDisplay.textContent = `本日 ${forecastTime.getHours()}時時点`;
 
         const moonPhaseValue = calculateMoonPhase(today.getFullYear(), today.getMonth() + 1, today.getDate());
         const starIndex = calculateStarIndex(forecast20h, moonPhaseValue);

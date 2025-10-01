@@ -79,6 +79,8 @@ function calculateMoonPhase(year, month, day) {
 function calculateStarIndex(data, moonPhaseValue) {
     let index = 0;
     const weatherMain = data.weather[0].main;
+    
+    // ★★★★ 天気の評価ロジックを修正 ★★★★
     if (weatherMain === 'Clear') {
         index += 50;
     } else if (weatherMain === 'Clouds') {

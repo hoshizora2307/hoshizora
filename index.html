@@ -3,55 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stellar Explorer</title>
+    <title>🌟 今夜の星空指数 🌌</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="splash-screen">
-        <h1 class="splash-title">Stellar Explorer</h1>
-        <div class="loading-dots">
-            <span>.</span><span>.</span><span>.</span>
-        </div>
-        <div class="splash-footer">
-            <p>プログラミング：hoshizora2307</p>
-            <p>監修：高瀬 敏行</p>
-            <p>権利者：株式会社S&T観光開発</p>
-        </div>
-    </div>
-
-    <div class="container" id="main-content">
+    <div class="container">
         <header>
-            <h1 class="title">Stellar Explorer</h1>
-            <p class="subtitle">A guide to the stars</p>
+            <h1>🌟 今夜の星空指数 🌌</h1>
+            <p>志賀高原SpaceLab観測地点</p>
+            <p id="date"></p>
+            <p id="time-display"></p>
         </header>
-        
+
         <main>
-            <div id="star-card">
-                <div class="star-name" id="star-name">Loading...</div>
-                <div class="star-info-container">
-                    <div class="info-section">
-                        <h2>基本情報</h2>
-                        <p>分類: <span id="spectral-class"></span></p>
-                        <p>等級: <span id="magnitude"></span></p>
-                        <p>質量: <span id="mass"></span></p>
-                    </div>
-                    <div class="info-section">
-                        <h2>物理特性</h2>
-                        <p>半径: <span id="radius"></span></p>
-                        <p>温度: <span id="temperature"></span></p>
-                        <p>光度: <span id="luminosity"></span></p>
-                    </div>
-                </div>
+            <div id="star-index-display">
+                <div id="index-value"></div>
+                <div id="index-message"></div>
+                <div id="cute-character"></div>
+            </div>
+
+            <div id="details">
+                <h2>詳細</h2>
+                <p>天気: <span id="weather">--</span></p>
+                <p>雲の量: <span id="clouds">--</span></p>
+                <p>月齢: <span id="moon-phase">--</span></p>
             </div>
             
-            <button id="next-star-btn">次へ</button>
+            <button id="refresh-btn">最新の情報に更新</button>
         </main>
 
         <footer>
-            <p>プログラミング：hoshizora2307</p>
-            <p>監修：高瀬 敏行</p>
-            <p>権利者：株式会社S&T観光開発</p>
+            <p>製作者：hoshizora2307</p>
+            <p>天気監修：高瀬 敏行</p>
+            <p>著作権者：株式会社S&T観光開発</p>
         </footer>
     </div>
 

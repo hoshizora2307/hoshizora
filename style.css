@@ -1,4 +1,4 @@
-body {
+body, html {
     font-family: 'M PLUS Rounded 1c', sans-serif;
     background: linear-gradient(to bottom, #f0e6ff, #d2f4ff, #a4eaff); /* 明るく可愛らしいグラデーション */
     color: #333;
@@ -8,12 +8,15 @@ body {
     min-height: 100vh;
     margin: 0;
     text-align: center;
-    overflow: hidden; /* 画像が画面外に出てもスクロールバーが出ないように */
+    overflow-x: hidden;
+    overflow-y: auto; /* ここを修正 */
     position: relative;
+    padding: 20px 0;
+    box-sizing: border-box;
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.9); /* 半透明で明るい背景 */
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -22,13 +25,13 @@ body {
     max-width: 400px;
     width: 90%;
     margin: auto;
-    z-index: 1; /* メインコンテンツが手前に来るように */
+    z-index: 1;
     position: relative;
     box-sizing: border-box;
 }
 
 header h1 {
-    color: #6a5acd; /* 落ち着いた紫色 */
+    color: #6a5acd;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
     font-size: 2.2em;
     margin-bottom: 5px;
@@ -48,7 +51,7 @@ header p {
 #index-value {
     font-size: 4.5em;
     font-weight: bold;
-    color: #ff69b4; /* 鮮やかなピンク */
+    color: #ff69b4;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -115,7 +118,6 @@ footer {
     margin-top: 20px;
 }
 
-/* takase02.pngのスタイル */
 #takase02 {
     position: fixed;
     width: 80px;
@@ -127,7 +129,6 @@ footer {
     object-fit: contain;
 }
 
-/* iwaya02.pngのスタイル */
 #iwaya02 {
     position: fixed;
     width: 60px;
@@ -167,7 +168,6 @@ footer {
     100% { transform: scale(1); }
 }
 
-/* レスポンシブデザイン */
 @media (max-width: 768px) {
     #takase02 {
         width: 60px;

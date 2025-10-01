@@ -1,166 +1,162 @@
-body {
-    font-family: 'M PLUS Rounded 1c', sans-serif;
-    background: linear-gradient(to bottom, #f0e6ff, #d2f4ff, #a4eaff); /* 明るく可愛らしいグラデーション */
-    color: #333;
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* 修正: スクロールを許可 */
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #ffc3a0 100%);
+    font-family: 'Noto Serif JP', serif;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+#app-container {
+    position: relative; /* 固定表示から相対表示に変更 */
+    width: 100%;
+    min-height: 100%; /* 画面の高さに合わせる */
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    text-align: center;
-    overflow: hidden;
-    position: relative;
-}
-
-.container {
-    background-color: rgba(255, 255, 255, 0.9); /* 半透明で明るい背景 */
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(5px);
-    border: 2px solid rgba(255, 255, 255, 1);
-    max-width: 400px;
-    width: 90%;
-    margin: auto;
-    z-index: 1;
-    position: relative;
+    flex-direction: column;
+    z-index: 10;
+    padding: 20px;
     box-sizing: border-box;
 }
 
-header h1 {
-    color: #6a5acd; /* 落ち着いた紫色 */
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-    font-size: 2.2em;
-    margin-bottom: 5px;
+#heart-container {
+    position: fixed; /* 画面に固定 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
 }
 
-header p {
-    color: #555;
-    font-size: 0.9em;
-}
-
-#star-index-display {
-    padding: 20px 0;
-    border-bottom: 1px dashed #ccc;
+#message-area {
     position: relative;
+    z-index: 2;
+    text-align: center;
+    animation: pulse-message 3s infinite;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 30px 50px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(255, 105, 180, 0.7);
+    box-sizing: border-box;
 }
 
-#index-value {
-    font-size: 4.5em;
+.main-message {
+    font-family: 'Kaushan Script', cursive;
+    font-size: 5.5em;
     font-weight: bold;
-    color: #ff69b4; /* 鮮やかなピンク */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 3px;
+    animation: fade-in 2s ease-out, glow-text 1.5s infinite alternate;
+    color: #ffcc00;
 }
 
-#index-message {
-    font-size: 1.3em;
-    color: #6a5acd;
-    margin-top: 10px;
+@keyframes glow-text {
+    from { text-shadow: 0 0 10px #ffcc00, 0 0 20px #ff69b4; }
+    to { text-shadow: 0 0 20px #ffcc00, 0 0 40px #ff69b4; }
 }
 
-#cute-character {
-    width: 100px;
-    height: 100px;
-    margin: 20px auto;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: transform 0.5s ease;
-    animation: float-animation 3s ease-in-out infinite alternate;
-}
-
-@keyframes float-animation {
-    0% { transform: translateY(0px) rotate(0deg); }
-    100% { transform: translateY(-15px) rotate(-5deg); }
-}
-
-#details {
+.sub-message {
+    font-size: 1.8em;
     margin-top: 20px;
+    opacity: 0;
+    animation: fade-in-up 1.5s ease-out 2s forwards;
+    color: #ffe0b2;
 }
 
-#details h2 {
-    color: #555;
-    font-size: 1.2em;
-    border-bottom: 2px solid #ff91a4;
-    display: inline-block;
-    padding-bottom: 5px;
-}
-
-#details p {
-    margin: 5px 0;
-    color: #555;
-}
-
-#refresh-btn {
-    padding: 12px 24px;
-    margin-top: 20px;
+#surprise-button {
+    margin-top: 40px;
+    padding: 20px 40px;
+    font-size: 1.5em;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ff4081, #ff80ab);
     border: none;
-    background-color: #ff91a4;
-    color: white;
-    border-radius: 25px;
+    border-radius: 50px;
+    box-shadow: 0 5px 20px rgba(255, 64, 129, 0.5);
+    color: #fff;
     cursor: pointer;
-    font-size: 1.1em;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: bounce 2s infinite, pulse-button 1.5s infinite alternate;
 }
 
-#refresh-btn:hover {
-    transform: scale(1.05);
-    background-color: #ff7f95;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+#surprise-button:hover {
+    transform: scale(1.15);
+    box-shadow: 0 8px 25px rgba(255, 64, 129, 0.8);
 }
 
-footer {
-    font-size: 0.8em;
-    color: #888;
-    margin-top: 20px;
+@keyframes pulse-button {
+    from { box-shadow: 5px 5px 20px rgba(255, 64, 129, 0.5); }
+    to { box-shadow: 8px 8px 25px rgba(255, 64, 129, 0.8); }
 }
 
-/* takase02.pngのスタイル */
-#takase02 {
-    position: fixed;
-    width: 80px;
-    height: 80px;
-    top: 5%;
-    left: 10%;
-    animation: takase-move 20s linear infinite, takase-blink 3s infinite;
-    z-index: 10;
+/* ハートと星のエフェクト */
+.heart, .star {
+    position: absolute;
+    animation: float-up 5s ease-in forwards;
+    opacity: 0;
 }
 
-/* iwaya02.pngのスタイル */
-#iwaya02 {
-    position: fixed;
-    width: 60px;
-    height: 60px;
-    bottom: 5%;
-    right: 15%;
-    animation: iwaya-move 25s linear infinite, iwaya-pulse 4s infinite alternate;
-    z-index: 10;
+.heart {
+    color: #ff69b4;
+    font-size: 2em;
 }
 
-@keyframes takase-move {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    25% { transform: translate(150px, 50px) rotate(30deg); }
-    50% { transform: translate(50px, 150px) rotate(-20deg); }
-    75% { transform: translate(200px, 100px) rotate(15deg); }
-    100% { transform: translate(0, 0) rotate(0deg); }
+.star {
+    color: #ffd700;
+    font-size: 1.5em;
 }
 
-@keyframes takase-blink {
-    0%, 20%, 40%, 60%, 80%, 100% { opacity: 1; }
-    10%, 30%, 50%, 70%, 90% { opacity: 0; }
+@keyframes float-up {
+    0% {
+        transform: translateY(0) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-1000px) scale(1.5);
+        opacity: 0;
+    }
 }
 
-@keyframes iwaya-move {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    20% { transform: translate(-100px, -20px) rotate(-15deg); }
-    40% { transform: translate(-50px, -100px) rotate(10deg); }
-    60% { transform: translate(-150px, -50px) rotate(-5deg); }
-    80% { transform: translate(-80px, -120px) rotate(20deg); }
-    100% { transform: translate(0, 0) rotate(0deg); }
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-@keyframes iwaya-pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
+    60% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes pulse-message {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes rotate-heart {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }

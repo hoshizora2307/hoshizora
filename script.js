@@ -1,5 +1,5 @@
-const API_KEY = 'c87064f29ceb28115ccf465338fd12ba'; // ★ここにあなたのAPIキーを貼り付けてください
-const city = 'Yamanouchi'; // 長野県下高井郡山ノ内町に固定
+const API_KEY = 'c87064f29ceb28115ccf465338fd12ba';
+const city = 'Yamanouchi';
 const dateDisplay = document.getElementById('date');
 const timeDisplay = document.getElementById('time-display');
 const indexValue = document.getElementById('index-value');
@@ -53,7 +53,6 @@ async function fetchWeatherData() {
             throw new Error('本日20時の予報が見つかりませんでした。');
         }
 
-        // 時刻表示の更新
         const forecastTime = new Date(forecast20h.dt * 1000);
         timeDisplay.textContent = `本日 ${forecastTime.getHours()}時時点`;
 
@@ -80,7 +79,7 @@ function calculateStarIndex(data, moonPhaseValue) {
     let index = 0;
     const weatherMain = data.weather[0].main;
     
-    // ★★★★ 天気の評価ロジックを修正 ★★★★
+    // 天気の評価ロジック
     if (weatherMain === 'Clear') {
         index += 50;
     } else if (weatherMain === 'Clouds') {

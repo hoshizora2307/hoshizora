@@ -79,12 +79,15 @@ function calculateStarIndex(data, moonPhaseValue) {
     let index = 0;
     const weatherMain = data.weather[0].main;
     
+    // ★★★ 天気の評価ロジックを再修正 ★★★
+    // 明確に晴れならポイントを加算し、それ以外は0からスタート
     if (weatherMain === 'Clear') {
         index += 50;
     } else if (weatherMain === 'Clouds') {
         index += 20;
     } else {
-        index = 0;
+        // 雨や雪の場合は、指数を低く設定
+        index = 10;
     }
     
     const clouds = data.clouds.all;

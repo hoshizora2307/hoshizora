@@ -168,7 +168,6 @@ footer {
     100% { transform: scale(1); }
 }
 
-/* レスポンシブデザイン */
 @media (max-width: 768px) {
     #takase02 {
         width: 60px;

@@ -1,9 +1,14 @@
 const API_KEY = 'c87064f29ceb28115ccf465338fd12ba';
 const city = 'Yamanouchi';
 const dateDisplay = document.getElementById('date');
-const refreshBtn = document.getElementById('refresh-btn');
-const forecastList = document.getElementById('forecast-list');
+const timeDisplay = document.getElementById('time-display');
+const indexValue = document.getElementById('index-value');
+const indexMessage = document.getElementById('index-message');
+const weatherDisplay = document.getElementById('weather');
+const cloudsDisplay = document.getElementById('clouds');
+const moonPhaseDisplay = document.getElementById('moon-phase');
 const cuteCharacter = document.getElementById('cute-character');
+const refreshBtn = document.getElementById('refresh-btn');
 
 const starCharacters = {
     'excellent': 'url("takase02.png")',
@@ -38,47 +43,27 @@ async function fetchWeatherData() {
         }
         const forecastData = await response.json();
         
-        displayForecast(forecastData);
+        const today = new Date();
+        const forecast20h = forecastData.list.find(item => {
+            const forecastDate = new Date(item.dt * 1000);
+            return forecastDate.getDate() === today.getDate() && forecastDate.getHours() >= 20;
+        });
+
+        if (!forecast20h) {
+            throw new Error('本日20時の予報が見つかりませんでした。');
+        }
+
+        const forecastTime = new Date(forecast20h.dt * 1000);
+        timeDisplay.textContent = `本日 ${forecastTime.getHours()}時時点`;
+
+        const moonPhaseValue = calculateMoonPhase(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        const starIndex = calculateStarIndex(forecast20h, moonPhaseValue);
+        displayStarIndex(starIndex, forecast20h, moonPhaseValue);
 
     } catch (error) {
         alert('ごめんね！' + error.message);
         clearDisplay();
     }
-}
-
-function displayForecast(forecastData) {
-    forecastList.innerHTML = '';
-    const today = new Date();
-
-    // 21時以降の夜間予報のみを抽出
-    const nighttimeForecasts = forecastData.list.filter(item => {
-        const forecastDate = new Date(item.dt * 1000);
-        return forecastDate.getHours() >= 18 || forecastDate.getHours() < 6;
-    });
-
-    nighttimeForecasts.forEach(item => {
-        const forecastDate = new Date(item.dt * 1000);
-        const moonPhaseValue = calculateMoonPhase(forecastDate.getFullYear(), forecastDate.getMonth() + 1, forecastDate.getDate());
-        const starIndex = calculateStarIndex(item, moonPhaseValue);
-        const characterKey = getCharacterKey(starIndex);
-
-        const forecastItem = document.createElement('div');
-        forecastItem.classList.add('forecast-item');
-        
-        forecastItem.innerHTML = `
-            <div class="forecast-time">${forecastDate.getHours()}時</div>
-            <div class="forecast-details">
-                <p class="forecast-message">${messages[characterKey]}</p>
-                <p>天気: ${item.weather[0].description} / 雲の量: ${item.clouds.all}%</p>
-                <p>月齢: ${moonPhaseValue}日</p>
-            </div>
-            <div class="forecast-index">${starIndex}</div>
-        `;
-        forecastList.appendChild(forecastItem);
-    });
-
-    // メインのキャラクター画像を表示
-    cuteCharacter.style.backgroundImage = starCharacters['excellent'];
 }
 
 function calculateMoonPhase(year, month, day) {
@@ -121,6 +106,16 @@ function calculateStarIndex(data, moonPhaseValue) {
     return index;
 }
 
+function displayStarIndex(starIndex, data, moonPhaseValue) {
+    indexValue.textContent = starIndex;
+    const characterKey = getCharacterKey(starIndex);
+    indexMessage.textContent = messages[characterKey];
+    weatherDisplay.textContent = data.weather[0].description;
+    cloudsDisplay.textContent = `${data.clouds.all}%`;
+    moonPhaseDisplay.textContent = `${moonPhaseValue}日`;
+    cuteCharacter.style.backgroundImage = starCharacters[characterKey];
+}
+
 function getCharacterKey(starIndex) {
     if (starIndex >= 80) return 'excellent';
     if (starIndex >= 50) return 'good';
@@ -129,28 +124,10 @@ function getCharacterKey(starIndex) {
 }
 
 function clearDisplay() {
-    forecastList.innerHTML = '<p>情報取得中にエラーが発生しました。</p>';
+    indexValue.textContent = '--';
+    indexMessage.textContent = '情報取得中...';
+    weatherDisplay.textContent = '--';
+    cloudsDisplay.textContent = '--';
+    moonPhaseDisplay.textContent = '--';
     cuteCharacter.style.backgroundImage = 'none';
 }
-
-// 画像をCSSアニメーションで動かすためのJS
-document.addEventListener('DOMContentLoaded', () => {
-    const takase02 = document.getElementById('takase02');
-    const iwaya02 = document.getElementById('iwaya02');
-    
-    setInterval(() => {
-        if (Math.random() < 0.3) {
-            takase02.style.animationName = 'takase-move, takase-blink';
-        } else {
-            takase02.style.animationName = 'takase-move';
-        }
-    }, 5000);
-
-    setInterval(() => {
-        if (Math.random() < 0.3) {
-            iwaya02.style.animationName = 'iwaya-move, iwaya-pulse';
-        } else {
-            iwaya02.style.animationName = 'iwaya-move';
-        }
-    }, 5000);
-});

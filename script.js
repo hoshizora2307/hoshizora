@@ -1,5 +1,7 @@
 const API_KEY = 'c87064f29ceb28115ccf465338fd12ba';
 const city = 'Yamanouchi';
+const palaceHotelCity = 'Yamanouchi'; // 志賀パレスホテルの所在地も同じ
+
 const dateDisplay = document.getElementById('date');
 const timeDisplay = document.getElementById('time-display');
 const indexValue = document.getElementById('index-value');
@@ -9,6 +11,10 @@ const cloudsDisplay = document.getElementById('clouds');
 const moonPhaseDisplay = document.getElementById('moon-phase');
 const cuteCharacter = document.getElementById('cute-character');
 const refreshBtn = document.getElementById('refresh-btn');
+
+const palaceWeatherEl = document.getElementById('palace-weather');
+const palaceTempEl = document.getElementById('palace-temp');
+const palaceHumidityEl = document.getElementById('palace-humidity');
 
 const starCharacters = {
     'excellent': 'url("takase02.png")',
@@ -26,11 +32,13 @@ const messages = {
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchWeatherData();
+    fetchPalaceHotelWeather();
     dateDisplay.textContent = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
 });
 
 refreshBtn.addEventListener('click', () => {
     fetchWeatherData();
+    fetchPalaceHotelWeather();
 });
 
 async function fetchWeatherData() {
@@ -65,6 +73,29 @@ async function fetchWeatherData() {
         clearDisplay();
     }
 }
+
+// 志賀パレスホテルの天気予報を取得する関数
+async function fetchPalaceHotelWeather() {
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${palaceHotelCity}&appid=${API_KEY}&lang=ja&units=metric`;
+    
+    try {
+        const response = await fetch(weatherUrl);
+        if (!response.ok) {
+            throw new Error('志賀パレスホテルの天気情報を取得できませんでした。');
+        }
+        const data = await response.json();
+        
+        palaceWeatherEl.textContent = data.weather[0].description;
+        palaceTempEl.textContent = `${Math.round(data.main.temp)}°C`;
+        palaceHumidityEl.textContent = `${data.main.humidity}%`;
+    } catch (error) {
+        console.error('Error fetching palace hotel weather:', error);
+        palaceWeatherEl.textContent = '--';
+        palaceTempEl.textContent = '--°C';
+        palaceHumidityEl.textContent = '--%';
+    }
+}
+
 
 function calculateMoonPhase(year, month, day) {
     const moonCycle = 29.530589;

@@ -15,13 +15,22 @@
             <h1>🌟 今夜の星空指数 🌌</h1>
             <p>志賀高原SpaceLab観測地点</p>
             <p id="date"></p>
+            <p id="time-display"></p>
         </header>
 
         <main>
-            <div id="forecast-list">
-                </div>
-            
-            <div id="cute-character"></div>
+            <div id="star-index-display">
+                <div id="index-value"></div>
+                <div id="index-message"></div>
+                <div id="cute-character"></div>
+            </div>
+
+            <div id="details">
+                <h2>詳細</h2>
+                <p>天気: <span id="weather">--</span></p>
+                <p>雲の量: <span id="clouds">--</span></p>
+                <p>月齢: <span id="moon-phase">--</span></p>
+            </div>
             
             <button id="refresh-btn">最新の情報に更新</button>
         </main>
@@ -33,9 +42,6 @@
         </footer>
     </div>
     
-    <img src="takase02.png" alt="takase02" id="takase02">
-    <img src="iwaya02.png" alt="iwaya02" id="iwaya02">
-
     <script src="script.js"></script>
 </body>
 </html>

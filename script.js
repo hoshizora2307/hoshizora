@@ -10,6 +10,10 @@ const moonPhaseDisplay = document.getElementById('moon-phase');
 const cuteCharacter = document.getElementById('cute-character');
 const refreshBtn = document.getElementById('refresh-btn');
 
+const palaceWeatherEl = document.getElementById('palace-weather');
+const palaceTempEl = document.getElementById('palace-temp');
+const palaceHumidityEl = document.getElementById('palace-humidity');
+
 const starCharacters = {
     'excellent': 'url("takase02.png")',
     'good': 'url("takase02.png")',
@@ -26,11 +30,13 @@ const messages = {
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchWeatherData();
+    fetchPalaceHotelWeather();
     dateDisplay.textContent = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
 });
 
 refreshBtn.addEventListener('click', () => {
     fetchWeatherData();
+    fetchPalaceHotelWeather();
 });
 
 async function fetchWeatherData() {
@@ -66,6 +72,27 @@ async function fetchWeatherData() {
     }
 }
 
+async function fetchPalaceHotelWeather() {
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&lang=ja&units=metric`;
+    
+    try {
+        const response = await fetch(weatherUrl);
+        if (!response.ok) {
+            throw new Error('志賀パレスホテルの天気情報を取得できませんでした。');
+        }
+        const data = await response.json();
+        
+        palaceWeatherEl.textContent = data.weather[0].description;
+        palaceTempEl.textContent = `${Math.round(data.main.temp)}°C`;
+        palaceHumidityEl.textContent = `${data.main.humidity}%`;
+    } catch (error) {
+        console.error('Error fetching palace hotel weather:', error);
+        palaceWeatherEl.textContent = '--';
+        palaceTempEl.textContent = '--°C';
+        palaceHumidityEl.textContent = '--%';
+    }
+}
+
 function calculateMoonPhase(year, month, day) {
     const moonCycle = 29.530589;
     const baseDate = new Date(2000, 0, 6);
@@ -80,7 +107,6 @@ function calculateStarIndex(data, moonPhaseValue) {
     const weatherMain = data.weather[0].main;
     
     // ★★★ 天気の評価ロジックを再修正 ★★★
-    // 明確に晴れならポイントを加算し、それ以外は0からスタート
     if (weatherMain === 'Clear') {
         index += 50;
     } else if (weatherMain === 'Clouds') {

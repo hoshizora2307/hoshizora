@@ -9,7 +9,7 @@ body, html {
     margin: 0;
     text-align: center;
     overflow-x: hidden;
-    overflow-y: auto; /* ここを修正 */
+    overflow-y: auto;
     position: relative;
     padding: 20px 0;
     box-sizing: border-box;
@@ -152,11 +152,12 @@ footer {
 
 #iwaya02 {
     position: fixed;
-    width: 80px;
-    height: 80px;
+    width: 80px; /* takase02と同じサイズに */
+    height: 80px; /* takase02と同じサイズに */
     bottom: 5%;
     right: 15%;
-    animation: iwaya-move 25s linear infinite, iwaya-pulse 4s infinite alternate;
+    /* takase02と同じアニメーションを適用 */
+    animation: takase-move 22s linear infinite reverse, takase-blink 4s infinite; /* 逆方向・少し異なる秒数で個性も出す */
     z-index: 10;
     object-fit: contain;
 }
@@ -174,20 +175,8 @@ footer {
     10%, 30%, 50%, 70%, 90% { opacity: 0; }
 }
 
-@keyframes iwaya-move {
-    0% { transform: translate(0vw, 0vh) rotate(0deg); }
-    20% { transform: translate(-15vw, -5vh) rotate(-15deg); }
-    40% { transform: translate(-8vw, -20vh) rotate(10deg); }
-    60% { transform: translate(-25vw, -10vh) rotate(-5deg); }
-    80% { transform: translate(-12vw, -25vh) rotate(20deg); }
-    100% { transform: translate(0vw, 0vh) rotate(0deg); }
-}
-
-@keyframes iwaya-pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
+/* iwaya02はtakase-moveとtakase-blinkを使い回す */
+/* iwaya-move と iwaya-pulse は不要になる */
 
 @media (max-width: 768px) {
     #takase02 {
